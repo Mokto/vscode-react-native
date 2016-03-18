@@ -51,7 +51,8 @@ var lintSources = [
     srcPath,
 ].map(function (tsFolder) { return tsFolder + '/**/*.ts'; });
 lintSources = lintSources.concat([
-    '!src/typings/**'
+    '!src/typings/**',
+    '!src/test/resources/myReactNative022Project/**'
 ]);
 
 var tslint = require('gulp-tslint');
@@ -62,12 +63,24 @@ gulp.task('tslint', function () {
 });
 
 function test() {
+    // Defaults
+    var pattern = "extensionContext";
+    var invert = true;
+
+    // Check if arguments were passed
+    var patternIndex = process.argv.indexOf("--pattern");
+    if (patternIndex > -1 && (patternIndex + 1) < process.argv.length) {
+        pattern = process.argv[patternIndex + 1];
+        invert = false;
+        console.log("\nTesting cases that match pattern: " + pattern);
+    }
+
     return gulp.src(['out/test/**/*.test.js', '!out/test/extension/**'])
         .pipe(mocha({
             ui: 'tdd',
             useColors: true,
-            invert: true,
-            grep: "extensionContext" // Do not run tests intended for the extensionContext
+            invert: invert,
+            grep: pattern
         }));
 }
 
@@ -86,7 +99,8 @@ gulp.task('check-copyright', function (cb) {
             "**/*.js",
             "!**/*.d.ts",
             "!node_modules/**/*.*",
-            "!SampleApplication/**/*.js"
+            "!SampleApplication/**/*.js",
+            "!src/test/resources/myReactNative022Project/**/*.js",
         ])
         .pipe(copyright());
 });
