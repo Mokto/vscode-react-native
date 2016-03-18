@@ -3,7 +3,7 @@
 
 import {IRunOptions} from "../common/launchArgs";
 import * as IOSPlatform from "./ios/iOSPlatform";
-import * as AndroidPlatform from "./android/androidPlatform";
+import * as AndroidPlatform from "../common/android/androidPlatform";
 
 /**
  * Contains all the mobile platform specific debugging operations.
@@ -26,7 +26,7 @@ export class PlatformResolver {
                 let ios: typeof IOSPlatform = require("./ios/iOSPlatform");
                 return new ios.IOSPlatform();
             case "android":
-                let android: typeof AndroidPlatform = require("./android/androidPlatform");
+                let android: typeof AndroidPlatform = require("../common/android/androidPlatform");
                 return new android.AndroidPlatform();
             default:
                 return null;
